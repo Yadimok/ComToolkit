@@ -269,6 +269,7 @@ void MainWindow::on_aLoadFiles_triggered()
         while (!tmpFile.atEnd())
         {
             QString data = tmpFile.read(4096);
+            countSendPackage += str.size();
             comPort->writeToComPort(data);
             qApp->processEvents();
         }
