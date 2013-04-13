@@ -10,10 +10,10 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
     ui->statusBar->addWidget(ui->lDate);
     ui->statusBar->addWidget(ui->lTime);
 
-    countReceivePackage = 0;
-    countSendPackage = 0;
+    m_countReceivePackage = 0;
+    m_countSendPackage = 0;
 
-    strFileName = "";
+    m_strFileName = "";
 
     //------------COM
     for (size_t idx=1; idx <256; ++idx)
@@ -97,13 +97,13 @@ void MainWindow::on_aAboutQt_triggered()
 void MainWindow::on_aClearSendData_triggered()
 {
     ui->teSendData->clear();
-    countSendPackage = 0;
+    m_countSendPackage = 0;
 }
 
 void MainWindow::on_aClearReceiveData_triggered()
 {
     ui->tbReceiveData->clear();
-    countReceivePackage = 0;
+    m_countReceivePackage = 0;
 }
 
 
@@ -142,8 +142,8 @@ void MainWindow::on_pbOpenPort_clicked()
         ui->pbClosePort->setDisabled(true);
     }
     setsPort->getLogString(comPort->getStringMessage());
-    countReceivePackage = 0;
-    countSendPackage = 0;
+    m_countReceivePackage = 0;
+    m_countSendPackage = 0;
 }
 
 void MainWindow::on_pbClosePort_clicked()
@@ -168,7 +168,7 @@ void MainWindow::receive_data(QByteArray bArray)
 {
     ui->tbReceiveData->append(bArray.toHex());
 
-    countReceivePackage += bArray.size();
+    m_countReceivePackage += bArray.size();
     ui->lReceiver->setText(tr("Receive packs - %1").arg(countReceivePackage));
 }
 
@@ -177,7 +177,7 @@ void MainWindow::on_pb_Send_clicked()
     QString str = ui->teSendData->toPlainText();
     comPort->writeToComPort(str);
 
-    countSendPackage += str.size();
+    m_countSendPackage += str.size();
     ui->lSender->setText(tr("Sended packs - %1").arg(countSendPackage));
 }
 
@@ -191,8 +191,8 @@ void MainWindow::on_pbStart_clicked()
         QString str = ui->teSendData->toPlainText();
         comPort->writeToComPort(str);
 
-        countSendPackage += str.size();
-        ui->lSender->setText(tr("Sended packs - %1").arg(countSendPackage));
+        m_countSendPackage += str.size();
+        ui->lSender->setText(tr("Sended packs - %1").arg(m_countSendPackage));
 
         ui->pbStart->setDisabled(true);
         ui->pbStop->setEnabled(true);
@@ -230,9 +230,9 @@ void MainWindow::on_aAbout_triggered()
 
 void MainWindow::on_aLoadFile_triggered()
 {
-    countSendPackage = 0;
-    strFileName = QFileDialog::getOpenFileName(0, "Open file", QDir::currentPath());
-    QFile resultFile(strFileName);
+    m_countSendPackage = 0;
+    m_strFileName = QFileDialog::getOpenFileName(0, "Open file", QDir::currentPath());
+    QFile resultFile(m_strFileName);
 
     if(!resultFile.open(QIODevice::ReadOnly))
     {
@@ -243,16 +243,16 @@ void MainWindow::on_aLoadFile_triggered()
     while (!resultFile.atEnd())
     {
         QString str = resultFile.read(4096);
-        countSendPackage += str.size();
+        m_countSendPackage += str.size();
         comPort->writeToComPort(str);
         qApp->processEvents();
     }
-    ui->lSender->setText(tr("Sended packs - %1").arg(countSendPackage));
+    ui->lSender->setText(tr("Sended packs - %1").arg(m_countSendPackage));
 }
 
 void MainWindow::on_aLoadFiles_triggered()
 {
-    countSendPackage = 0;
+    m_countSendPackage = 0;
     QString str;
     QStringList strList = QFileDialog::getOpenFileNames(0, "Choose one or more files for processing", QDir::currentPath());
 
@@ -269,12 +269,12 @@ void MainWindow::on_aLoadFiles_triggered()
         while (!tmpFile.atEnd())
         {
             QString data = tmpFile.read(4096);
-            countSendPackage += str.size();
+            m_countSendPackage += str.size();
             comPort->writeToComPort(data);
             qApp->processEvents();
         }
     }
-    ui->lSender->setText(tr("Sended packs - %1").arg(countSendPackage));
+    ui->lSender->setText(tr("Sended packs - %1").arg(m_countSendPackage));
 }
 
 void MainWindow::on_aSaveToFile_triggered()
