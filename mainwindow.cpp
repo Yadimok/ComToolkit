@@ -169,7 +169,7 @@ void MainWindow::receive_data(QByteArray bArray)
     ui->tbReceiveData->append(bArray.toHex());
 
     m_countReceivePackage += bArray.size();
-    ui->lReceiver->setText(tr("Receive packs - %1").arg(countReceivePackage));
+    ui->lReceiver->setText(tr("Receive packs - %1").arg(m_countReceivePackage));
 }
 
 void MainWindow::on_pb_Send_clicked()
@@ -178,7 +178,7 @@ void MainWindow::on_pb_Send_clicked()
     comPort->writeToComPort(str);
 
     m_countSendPackage += str.size();
-    ui->lSender->setText(tr("Sended packs - %1").arg(countSendPackage));
+    ui->lSender->setText(tr("Sended packs - %1").arg(m_countSendPackage));
 }
 
 void MainWindow::on_pbStart_clicked()
