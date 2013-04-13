@@ -54,12 +54,12 @@ private:
     QTimer          *timer;
     QTimer          *timerSender;
 
-    QString         strFileName;
+    QString         m_strFileName;
 
     void updateCurrentDate();
 
-    long long countReceivePackage;
-    long long countSendPackage;
+    long long m_countReceivePackage;
+    long long m_countSendPackage;
 };
 
 #endif // MAINWINDOW_H
