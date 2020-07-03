@@ -1,4 +1,4 @@
-ComToolkit
+ComToolkit:
 ==========
 
 For WinXP-Win7, written on Qt + WinAPI
